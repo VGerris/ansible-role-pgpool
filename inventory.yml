@@ -35,7 +35,8 @@ pgpool:
         - hostname: pgsql01
         - hostname: pgsql02
   vars:
-    pgpool_postgresql_version: 12
+    pgpool_postgresql_version: 15
+    pgpool_version_debian: 4.3.5-3.pgdg22.04+1 # or : postgresql-15-pgpool2 for latest
     # .pcpass file
     pgpool_pcppass_entries: 
       - hostname: pgsql01
