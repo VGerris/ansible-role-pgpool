@@ -310,16 +310,16 @@ load_balance_mode = on
                                    # (change requires restart)
 ignore_leading_white_space = on
                                    # Ignore leading white spaces of each query
-white_function_list = ''
+read_only_function_list = ''
                                    # Comma separated list of function names
                                    # that don't write to database
                                    # Regexp are accepted
-black_function_list = 'currval,lastval,nextval,setval'
+write_function_list = 'currval,lastval,nextval,setval'
                                    # Comma separated list of function names
                                    # that write to database
                                    # Regexp are accepted
 
-black_query_pattern_list = ''
+primary_routing_query_pattern_list = ''
                                    # Semicolon separated list of query patterns
                                    # that should be sent to primary node
                                    # Regexp are accepted
@@ -361,14 +361,7 @@ statement_level_load_balance = off
 # MASTER/SLAVE MODE
 #------------------------------------------------------------------------------
 
-master_slave_mode = on
-                                   # Activate master/slave mode
-                                   # (change requires restart)
-master_slave_sub_mode = 'slony'
-                                   # Master/slave sub mode
-                                   # Valid values are combinations stream, slony
-                                   # or logical. Default is stream.
-                                   # (change requires restart)
+backend_clustering_mode = 'streaming_replication'
 
 # - Streaming -
 
@@ -833,11 +826,11 @@ memqcache_cache_block_size = 1048576
 memqcache_oiddir = '/var/log/pgpool/oiddir'
                                    # Temporary work directory to record table oids
                                    # (change requires restart)
-white_memqcache_table_list = ''
+cache_safe_memqcache_table_list = ''
                                    # Comma separated list of table names to memcache
                                    # that don't write to database
                                    # Regexp are accepted
-black_memqcache_table_list = ''
+cache_unsafe_memqcache_table_list = ''
                                    # Comma separated list of table names not to memcache
                                    # that don't write to database
                                    # Regexp are accepted

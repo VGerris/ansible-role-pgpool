@@ -61,6 +61,10 @@ Show all configuration parameters
 ```bash
 pgpool@pgpool01:~$ psql -h 192.168.56.30 -p 9999 -U admin -d testdb -c 'PGPOOL SHOW ALL' 
 ```
+Or from Ansible:
+```bash
+ansible pgpool01 -b --become-user postgres -m shell -a "psql -h 192.168.56.30 -p 9999 -U admin -d testdb -c 'PGPOOL SHOW ALL' " -i invpgpool.yml 
+```
 
 Show pool status
 ```bash

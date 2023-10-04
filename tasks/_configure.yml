@@ -106,6 +106,14 @@
     trim_blocks: no
   when: pgpool_pgpass_entries | length > 0
 
+- name: Configure | Upload pgpool_node_id file for pgpool2 watchdog
+  template:
+    src: pgpool_node_id.j2
+    dest: "{{ pgpool_home_directory }}/pgpool_node_id"
+    owner: "{{ pgpool_postgresql_service_user }}"
+    group: "{{ pgpool_postgresql_service_group }}"
+    mode: 0600
+
 - name: Configure | Copy .bashrc
   copy:
     src: /etc/skel/.bashrc

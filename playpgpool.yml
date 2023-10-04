@@ -1,0 +1,19 @@
+---
+- hosts: pgpool
+  gather_facts: yes
+  become: yes
+  pre_tasks:
+    - name: Install dependencies
+      apt: 
+        name: 
+          - python3-apt
+          - vim
+        update_cache: yes
+    - name: Use python3 by default
+      alternatives: 
+        path: /usr/bin/python3
+        link: /usr/bin/python
+        name: python
+        priority: 1
+  roles:
+    - name: pgpool

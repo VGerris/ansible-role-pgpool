@@ -320,16 +320,16 @@ load_balance_mode = {{ pgpool_load_balance_mode }}
                                    # (change requires restart)
 ignore_leading_white_space = {{ pgpool_ignore_leading_white_space }}
                                    # Ignore leading white spaces of each query
-white_function_list = '{{ pgpool_white_function_list }}'
+read_only_function_list = '{{ pgpool_white_function_list }}'
                                    # Comma separated list of function names
                                    # that don't write to database
                                    # Regexp are accepted
-black_function_list = '{{ pgpool_black_function_list }}'
+write_function_list = '{{ pgpool_black_function_list }}'
                                    # Comma separated list of function names
                                    # that write to database
                                    # Regexp are accepted
 
-black_query_pattern_list = '{{ pgpool_black_query_pattern_list }}'
+primary_routing_query_pattern_list = '{{ pgpool_black_query_pattern_list }}'
                                    # Semicolon separated list of query patterns
                                    # that should be sent to primary node
                                    # Regexp are accepted
@@ -371,14 +371,7 @@ statement_level_load_balance = {{ pgpool_statement_level_load_balance }}
 #------------------------------------------------------------------------------
 # https://www.pgpool.net/docs/latest/en/html/runtime-streaming-replication-check.html 
 
-master_slave_mode = {{ pgpool_master_slave_mode }}
-                                   # Activate master/slave mode
-                                   # (change requires restart)
-master_slave_sub_mode = '{{ pgpool_master_slave_sub_mode }}'
-                                   # Master/slave sub mode
-                                   # Valid values are combinations stream, slony
-                                   # or logical. Default is stream.
-                                   # (change requires restart)
+backend_clustering_mode = 'streaming_replication'
 
 # - Streaming -
 
@@ -405,7 +398,7 @@ delay_threshold = {{ pgpool_delay_threshold }}
 
 # - Special commands -
 
-follow_master_command = '{{ pgpool_follow_master_command }}'
+follow_primary_command = '{{ pgpool_follow_master_command }}'
                                    # Executes this command after master failover
                                    # Special values:
                                    #   %d = failed node id
@@ -577,10 +570,10 @@ ping_path = '{{ ppgool_ping_path }}'
 
 # - Watchdog communication Settings -
 
-wd_hostname = '{{ pgpool_wd_hostname }}'
+#hostname0 = '{{ pgpool_wd_hostname }}'
                                     # Host name or IP address of this watchdog
                                     # (change requires restart)
-wd_port = {{ pgpool_wd_port }}
+#wd_port0 = {{ pgpool_wd_port }}
                                     # port number for watchdog service
                                     # (change requires restart)
 wd_priority = {{ pgpool_wd_priority }}
@@ -685,10 +678,11 @@ wd_interval = {{ pgpool_wd_interval }}
                                     # (change requires restart)
 
 # -- heartbeat mode --
-
-wd_heartbeat_port = {{ pgpool_wd_heartbeat_port }}
-                                    # Port number for receiving heartbeat signal
-                                    # (change requires restart)
+#    heartbeat_hostname0 = {{ pgpool_wd_hostname }}
+#    heartbeat_port0 = {{ pgpool_wd_heartbeat_port }}
+#                                        # Port number for receiving heartbeat signal
+#                                        # (change requires restart)
+#    heartbeat_device0 = ''
 wd_heartbeat_keepalive = {{ pgpool_wd_heartbeat_keepalive }}
                                     # Interval time of sending heartbeat signal (sec)
                                     # (change requires restart)
@@ -698,8 +692,8 @@ wd_heartbeat_deadtime = {{ pgpool_wd_heartbeat_deadtime }}
 
 {% if pgpool_heartbeat_destination | length > 0 %}
 {% for server in pgpool_heartbeat_destination %}
-heartbeat_destination{{ loop.index0 }} = '{{ server.hostname | mandatory }}'
-heartbeat_destination_port{{ loop.index0 }} = '{{ server.port | default(pgpool_wd_heartbeat_port) }}'
+heartbeat_hostname{{ loop.index0 }} = '{{ server.hostname | mandatory }}'
+heartbeat_port{{ loop.index0 }} = '{{ server.port | default(pgpool_wd_heartbeat_port) }}'
 heartbeat_device{{ loop.index0 }} = '{{ server.device | default('') }}'
 {% endfor %}
 {% endif %}
@@ -746,9 +740,9 @@ wd_lifecheck_password = '{{ pgpool_wd_lifecheck_password }}'
 
 {% if pgpool_other_settings | length > 0 %}
 {% for server in pgpool_other_settings %}
-other_pgpool_hostname{{ loop.index0 }} = {{ server.hostname | mandatory }}
-other_pgpool_port{{ loop.index0 }} = {{ server.port | default(pgpool_port) }}
-other_wd_port{{ loop.index0 }} = {{ server.wd_port | default(pgpool_wd_port) }}
+hostname{{ loop.index0 }} = {{ server.hostname | mandatory }}
+pgpool_port{{ loop.index0 }} = {{ server.port | default(pgpool_port) }}
+wd_port{{ loop.index0 }} = {{ server.wd_port | default(pgpool_wd_port) }}
 {% endfor %}
 {% endif %}
 
@@ -859,11 +853,11 @@ memqcache_cache_block_size = {{ pgpool_memqcache_cache_block_size }}
 memqcache_oiddir = '{{ pgpool_memqcache_oiddir }}'
                                    # Temporary work directory to record table oids
                                    # (change requires restart)
-white_memqcache_table_list = '{{ pgpool_white_memqcache_table_list }}'
+cache_safe_memqcache_table_list = '{{ pgpool_white_memqcache_table_list }}'
                                    # Comma separated list of table names to memcache
                                    # that don't write to database
                                    # Regexp are accepted
-black_memqcache_table_list = '{{ pgpool_black_memqcache_table_list }}'
+cache_unsafe_memqcache_table_list = '{{ pgpool_black_memqcache_table_list }}'
                                    # Comma separated list of table names not to memcache
                                    # that don't write to database
                                    # Regexp are accepted

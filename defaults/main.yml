@@ -12,6 +12,7 @@ pgpool_apt_dependencies:
   - postgresql-client-{{ pgpool_postgresql_version }}
   - postgresql-client-common
   - arping
+  - postgresql-15-pgpool2
 pgpool_extensions:
   - pgpool_recovery
   - pgpool_adm
@@ -61,7 +62,7 @@ pgpool_pcppass_entries:
     port: 9898
     user: pgpool
     password: pgpool
-  - hostname: "{{ pgpool_pcp_socket_dir }}" # allows using -h /var/run/pcp instead of 'localhost' 
+  - hostname: "{{ pgpool_pcp_socket_dir }}" # allows using -h /var/run/pcp instead of 'localhost' or overridden var value
     port: 9898
     user: pgpool
     password: pgpool
@@ -170,7 +171,7 @@ pgpool_failover_if_affected_tuples_mismatch: 'off'
 # LOAD BALANCING MODE
 pgpool_load_balance_mode: 'off'
 pgpool_ignore_leading_white_space: 'on'
-pgpool_white_function_list: ''
+pgpool_white_function_list: '' # now read_only_function_list
 pgpool_black_function_list: currval,lastval,nextval,setval
 pgpool_black_query_pattern_list: ''
 pgpool_database_redirect_preference_list: ''
@@ -179,9 +180,9 @@ pgpool_allow_sql_comments: 'off'
 pgpool_disable_load_balance_on_write: 'transaction' # one of 'transaction', 'trans_transaction' or 'always'
 pgpool_statement_level_load_balance: 'off'
 
-# MASTER/SLAVE MODE (alias pgpool running mode) 
-pgpool_master_slave_mode: 'on'
-pgpool_master_slave_sub_mode: stream
+# MASTER/SLAVE MODE (alias pgpool running mode) - now backend clustering mode
+backend_clustering_mode: 'streaming_replication'
+
 # Streaming
 pgpool_sr_check_period: 10
 pgpool_sr_check_user: 'nobody'
@@ -286,7 +287,7 @@ pgpool_relcache_size: 256
 pgpool_check_temp_table: catalog
 pgpool_check_unlogged_table: 'on'
 pgpool_enable_shared_relcache: 'on'
-pgpool_relcache_query_target: master
+pgpool_relcache_query_target: primary
 
 # IN MEMORY QUERY MEMORY CACHE
 pgpool_in_memory_query_cache: 'off'
