@@ -43,7 +43,7 @@ if [ $NEW_MASTER_NODE_ID -lt 0 ]; then
 	exit 0
 fi
 
-## Test passwrodless SSH
+## Test passwordless SSH
 ssh -T -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null postgres@${NEW_MASTER_NODE_HOST} -i ~/.ssh/id_rsa_pgpool ls /tmp > /dev/null
 
 if [ $? -ne 0 ]; then
