@@ -113,7 +113,7 @@ pgpool_authentication_timeout: 60
 pgpool_allow_clear_text_frontend_auth: 'on'
 
 # SSL Connections
-pgpool_ssl: off
+pgpool_ssl: on
 pgpool_ssl_key: ./server.key
 pgpool_ssl_cert: ./server.cert
 pgpool_ssl_ca_cert: ''
