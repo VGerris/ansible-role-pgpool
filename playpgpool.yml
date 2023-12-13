@@ -15,5 +15,14 @@
         link: /usr/bin/python
         name: python
         priority: 1
+    - name: PostgreSQL and Pgpool2 | set owner and umask for certifcates to postgres
+      ansible.builtin.shell:
+        cmd: |
+          chown postgres /etc/pgpool2/server.key /etc/pgpool2/server.cert
+          chmod 0600 /etc/pgpool2/server.key /etc/pgpool2/server.cert
+        executable: /bin/bash
+      become: yes
+      become_user: "root"
+      ignore_errors: yes
   roles:
     - name: pgpool

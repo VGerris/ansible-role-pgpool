@@ -6,10 +6,7 @@ PgPool
 Installs and configures PgPool-II for Debian/Ubuntu. The default _running mode_ is **streaming replication mode**.
 
 Tested with :
-  - Debian 10.x :heavy_check_mark:
-  - Debian 11.x :heavy_check_mark:
-  - Ubuntu 18.04.x :heavy_check_mark:
-  - Ubuntu 20.04.x :heavy_check_mark:
+  - Ubuntu 22.04.x :heavy_check_mark:
 
 > :warning: Only the major 4.3 is currently being handled and tested by this role.  
 Note on versioning ( from old repo regarding 4.1 )  
