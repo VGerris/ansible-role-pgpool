@@ -256,7 +256,7 @@ pgpool_allow_multiple_failover_requests_from_node: 'off'
 pgpool_enable_consensus_with_half_votes: 'off'
 # Lifecheck Setting
 # common
-pgpool_wd_monitoring_interfaces_list: 'ens3'
+pgpool_wd_monitoring_interfaces_list: 'any'
 pgpool_wd_lifecheck_method: 'heartbeat'
 pgpool_wd_interval: 10
 # heartbeat mode
