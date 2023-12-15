@@ -55,9 +55,9 @@
     db: template1
     query: CREATE EXTENSION {{ item }}
   loop: "{{ pgpool_extensions }}"
-  become: yes
+  become: true
   become_user: "{{ pgpool_postgresql_service_user }}"
-  ignore_errors: yes # todo : execute only on the primary node using postgresql_info or else
+  ignore_errors: true # todo : execute only on the primary node using postgresql_info or else
 
 - name: Apt | Shutdown systemd-based instance upon first installation
   service:

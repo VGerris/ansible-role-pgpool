@@ -148,3 +148,13 @@
   become: true
   become_user: "root"
   ignore_errors: true
+
+- name: disable systemd timers that run autoupgrade - prevent restart network
+  ansible.builtin.shell:
+    cmd: |
+      systemctl mask apt-daily.service apt-daily-upgrade.service
+      systemctl daemon-reload
+    executable: /bin/bash
+  become: true
+  become_user: "root"
+  ignore_errors: true
