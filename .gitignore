@@ -2,3 +2,4 @@ id_rsa
 *.key
 *.log
 *.sql
+.vscode/settings.json

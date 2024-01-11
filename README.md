@@ -146,8 +146,77 @@ pgpool_socket_dir: /var/run/postgresql
 pgpool_pcp_socket_dir: /var/run/postgresql
 pgpool_wd_ipc_socket_dir: /var/run/postgresql
 ```
+The included inventory.yml file has this setup.
 
 More details at : https://www.pgpool.net/docs/latest/en/html/pcp-commands.html 
+
+Security setup
+--------------
+
+Pgpool uses the pg_hba.conf file for access, details are here:
+https://www.pgpool.net/docs/latest/en/html/auth-pool-hba-conf.html
+
+The admin user is used as the 'superadmin' user. The pgpass file is used to set the password.
+In the playbook one sets these as variables in the inventory:
+ - pgpool_passwd_users_md5 - contains entries for the pgpass file
+ - pgpool_pool_hba_entries - contains entries for pool_hba.conf
+
+ By default the admin user is setup with password set to secret if not set otherwise - **change it for production**.
+
+ The admin entry is setup ass hostsll so an SSL connection is required to connect.
+ In production one can use IP white listing to the pgpool IP to further restrict this.
+ This only applies to port 9999, the default port for pgpool.
+
+ **Note**: between hosts in the network where pgpool/postgresql runs, the pg_hba rights do not apply, the postgres security rules do, so once one has access to a node in the internal network, like the bootstrap node, one can use for example repmgr and admin as defined in the playbook ( that this playbook can make use of ).
+ This should be further restricted when required.
+
+ For example, connecting to the external IP/DNS as follows from a range that is allowed will give:
+ ```bash
+ $ PGSSLMODE=verify-full psql -h yourpublicpgpoolip.yourexternal.domain  -p 9999 -U admin -d testdb -c 'SELECT * from pg_catalog.pg_stat_ssl'
+Password for user admin: 
+   pid   | ssl | version |         cipher         | bits | client_dn | client_serial | issuer_dn 
+---------+-----+---------+------------------------+------+-----------+---------------+-----------
+   10548 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 |           |               | 
+   10549 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 |           |               | 
+   11112 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 |           |               | 
+   11115 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 |           |               | 
+   11117 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 |           |               | 
+   11176 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 |           |               | 
+ 1412856 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 |           |               | 
+ 1474215 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 |           |               | 
+(8 rows)
+```
+but the following happens when using user repmgr:
+```bash
+$ PGSSLMODE=verify-full psql -h yourpublicpgpoolip.yourexternal.domain -p 9999 -U repmgr -d repmgr -c 'SELECT * from pg_catalog.pg_stat_ssl'
+psql: error: connection to server at "yourpublicpgpoolip.yourexternal.domain" (a.b.c.d), port 9999 failed: FATAL:  client authentication failed
+DETAIL:  no pool_hba.conf entry for host "w.x.y.z", user "repmgr", database "repmgr", SSL on
+HINT:  see pgpool log for details
+```
+
+From the a node within the network the same query can look like this, assuming the used IP address is the internal one for yourpublicpgpoolip.yourexternal.domain:
+```bash
+$ psql -h 192.168.56.30  -p 5432 -U admin -d repmgr -c 'SELECT * from pg_catalog.pg_stat_ssl'
+Password for user admin: 
+   pid   | ssl | version |         cipher         | bits | client_dn | client_serial | issuer_dn 
+---------+-----+---------+------------------------+------+-----------+---------------+-----------
+   10915 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 |           |               | 
+ 3777410 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 |           |               | 
+   10983 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 |           |               | 
+ 3818533 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 |           |               | 
+(4 rows)
+
+psql -h 192.168.56.30  -p 5432 -U repmgr -d repmgr -c 'SELECT * from pg_catalog.pg_stat_ssl'
+Password for user repmgr: 
+   pid   | ssl | version |         cipher         | bits | client_dn | client_serial | issuer_dn 
+---------+-----+---------+------------------------+------+-----------+---------------+-----------
+   10915 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 |           |               | 
+ 3777410 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 |           |               | 
+   10983 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 |           |               | 
+ 3818410 | t   | TLSv1.3 | TLS_AES_256_GCM_SHA384 |  256 |           |               | 
+(4 rows)
+```
+Make sure to verify only the required ports and users are enabled as required by security policy.
 
 License
 -------

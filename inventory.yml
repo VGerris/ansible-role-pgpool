@@ -69,10 +69,10 @@ pgpool:
         port: 9898
         user: pgpool
         password: pgpool
-    # pool_passwd
+    # pool_passwd - changeit for production - TODO - make optional shell variable
     pgpool_passwd_users_md5: 
       - username: admin
-        password: secret
+        password: secret 
     # backend settings
     pgpool_backend_servers:
       - hostname: pgsql01
@@ -101,12 +101,12 @@ pgpool:
         user: admin
         address: 192.168.56.0/24
         method: trust
-      # TODO remove to limit access
-      - type: host
+      # This is for the admin user and requires a pgpass password setup
+      - type: hostssl
         database: all
         user: admin
         address: 0.0.0.0/0
-        method: trust
+        method: md5
     # logs
     pgpool_log_hostname: 'on'
     pgpool_log_statement: 'on'
