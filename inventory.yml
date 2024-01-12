@@ -72,7 +72,9 @@ pgpool:
     # pool_passwd - changeit for production - TODO - make optional shell variable
     pgpool_passwd_users_md5: 
       - username: admin
-        password: secret 
+        password: secret
+      - username: monitoring
+        password: secret
     # backend settings
     pgpool_backend_servers:
       - hostname: pgsql01
@@ -105,6 +107,11 @@ pgpool:
       - type: hostssl
         database: all
         user: admin
+        address: 0.0.0.0/0
+        method: md5
+      - type: hostssl
+        database: testdb
+        user: monitoring
         address: 0.0.0.0/0
         method: md5
     # logs
