@@ -159,11 +159,12 @@ https://www.pgpool.net/docs/latest/en/html/auth-pool-hba-conf.html
 The admin user is used as the 'superadmin' user. The pgpass file is used to set the password.
 In the playbook one sets these as variables in the inventory:
  - pgpool_passwd_users_md5 - contains entries for the pgpass file
+ - pgpool_passwd_users_sha256 - contains entries for the pgpass file
  - pgpool_pool_hba_entries - contains entries for pool_hba.conf
 
  By default the admin user is setup with password set to secret if not set otherwise - **change it for production**.
 
- The admin entry is setup ass hostsll so an SSL connection is required to connect.
+ The admin entry is setup as hostsll so an SSL connection is required to connect.
  In production one can use IP white listing to the pgpool IP to further restrict this.
  This only applies to port 9999, the default port for pgpool.
 

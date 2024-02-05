@@ -39,8 +39,8 @@
         host: 0.0.0.0
         port: "{{ pgpool_pcp_port }}"
 
-    - name: Show POOL_NODES
-      postgresql_query:
+    - name: Show POOL_NODES # TODO - verify md5 / sha256
+      community.postgresql.postgresql_query:
         login_host: "{{ pgpool_delegate_IP }}"
         login_user: "{{ pgpool_passwd_users_md5[0].username }}"
         db: testdb

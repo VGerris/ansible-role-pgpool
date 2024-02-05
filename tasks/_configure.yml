@@ -106,6 +106,26 @@
     trim_blocks: no
   when: pgpool_pgpass_entries | length > 0
 
+- name: Configure | Upload .pgpoolkey file for pgpool user ( for generation of pool_passwd)
+  template:
+    src: pgpoolkey.j2
+    dest: "{{ pgpool_home_directory }}/.pgpoolkey"
+    owner: "{{ pgpool_user }}"
+    group: "{{ pgpool_group }}"
+    mode: 0600
+    trim_blocks: no
+  when: pgpool_passwd_use_sha256 | bool
+
+- name: Configure | Upload .pgpoolkey file for postgres user ( to have connections work)
+  template:
+    src: pgpoolkey.j2
+    dest: "{{ pgpool_postgresql_home_directory }}/.pgpoolkey"
+    owner: "{{ pgpool_postgresql_service_user }}"
+    group: "{{ pgpool_postgresql_service_group }}"
+    mode: 0600
+    trim_blocks: no
+  when: pgpool_passwd_use_sha256 | bool
+
 - name: Configure | Upload pgpool_node_id file for pgpool2 watchdog
   template:
     src: pgpool_node_id.j2
@@ -137,6 +157,14 @@
       pg_md5 --md5auth --username={{ item.username }} {{ item.password }}
   loop: "{{ pgpool_passwd_users_md5 }}"
   when: pgpool_passwd_use_md5 | bool
+  become_user: "{{ pgpool_user }}"
+
+- name: Configure | Generate pool_passwd file using pg_enc auth method
+  shell:
+    cmd: |
+      pg_enc -m -f "{{ pgpool_home_directory }}/pgpool.conf" --username={{ item.username }} {{ item.password }}
+  loop: "{{ pgpool_passwd_users_sha256 }}"
+  when: pgpool_passwd_use_sha256 | bool
   become_user: "{{ pgpool_user }}"
 
 - name: PostgreSQL and Pgpool2 | set owner and umask for certifcates to postgres

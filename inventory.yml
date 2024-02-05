@@ -47,6 +47,9 @@ pgpool:
     pgpool_socket_dir: /var/run/postgresql
     pgpool_pcp_socket_dir: /var/run/postgresql
     pgpool_wd_ipc_socket_dir: /var/run/postgresql
+    #pgpool_passwd_users_sha256_username: pgpool
+    #pgpool_passwd_users_sha256_password: pgpool
+
     # .pcpass file
     pgpool_pcppass_entries: 
       - hostname: pgsql01
@@ -71,6 +74,11 @@ pgpool:
         password: pgpool
     # pool_passwd - changeit for production - TODO - make optional shell variable
     pgpool_passwd_users_md5: 
+      - username: admin
+        password: secret
+      - username: monitoring
+        password: secret
+    pgpool_passwd_users_sha256:
       - username: admin
         password: secret
       - username: monitoring
@@ -108,12 +116,12 @@ pgpool:
         database: all
         user: admin
         address: 0.0.0.0/0
-        method: md5
+        method: scram-sha-256
       - type: hostssl
         database: testdb
         user: monitoring
         address: 0.0.0.0/0
-        method: md5
+        method: scram-sha-256
     # logs
     pgpool_log_hostname: 'on'
     pgpool_log_statement: 'on'

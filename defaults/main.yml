@@ -72,10 +72,14 @@ pgpool_pcppass_entries:
     password: pgpool
 
 # pool_passwd file
-pgpool_passwd_use_md5: yes
+pgpool_passwd_use_md5: no
 pgpool_passwd_users_md5: 
   - username: pgpool
     password: pgpool
+pgpool_passwd_use_sha256: yes
+pgpool_passwd_users_sha256:
+  - username: pgpool #"{{ pgpool_passwd_users_sha256_username }}"
+    password: pgpool #"{{ pgpool_passwd_users_sha256_password }}"
 
 # pgpool Connection Settings
 pgpool_listen_addresses: '*'
