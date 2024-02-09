@@ -46,6 +46,7 @@ pgpool_home_directory: /etc/pgpool2
 pgpool_group: pgpool
 pgpool_user: pgpool
 pgpool_password_cleartext: pgpool
+pgpool_scram_sha_256_key: secret
 
 # .pgpass file
 pgpool_pgpass_entries: []

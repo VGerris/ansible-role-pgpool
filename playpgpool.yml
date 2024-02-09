@@ -26,3 +26,9 @@
       ignore_errors: yes
   roles:
     - name: pgpool
+      vars:
+        pgpool_scram_sha_256_key: pgpool_scram_sha_256_key_replace
+        postgresql_manager_user: admin
+        postgresql_manager_password: postgresql_manager_password_replace
+        postgresql_monitoring_user: monitoring
+        postgresql_monitoring_password: postgresql_monitoring_password_replace

@@ -74,15 +74,15 @@ pgpool:
         password: pgpool
     # pool_passwd - changeit for production - TODO - make optional shell variable
     pgpool_passwd_users_md5: 
-      - username: admin
-        password: secret
-      - username: monitoring
-        password: secret
+      - username: "{{ postgresql_manager_user }}"
+        password: "{{ postgresql_manager_password }}"
+      - username: "{{ postgresql_monitoring_user }}"
+        password: "{{ postgresql_monitoring_password }}"
     pgpool_passwd_users_sha256:
-      - username: admin
-        password: secret
-      - username: monitoring
-        password: secret
+      - username: "{{ postgresql_manager_user }}"
+        password: "{{ postgresql_manager_password }}"
+      - username: "{{ postgresql_monitoring_user }}"
+        password: "{{ postgresql_monitoring_password }}"
     # backend settings
     pgpool_backend_servers:
       - hostname: pgsql01
