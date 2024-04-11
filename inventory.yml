@@ -42,7 +42,7 @@ pgpool:
         - hostname: pgsql03
   vars:
     pgpool_postgresql_version: 15
-    pgpool_version_debian: 4.3.7-2.pgdg22.04+1 #4.3.5-3.pgdg22.04+1 # or : postgresql-15-pgpool2 for latest? reference to apt package
+    pgpool_version_debian: '' # 4.3.7-2.pgdg22.04+1 or empty for latest 
     pgpool_pid_file_name: /var/run/postgresql/pgpool.pid
     pgpool_socket_dir: /var/run/postgresql
     pgpool_pcp_socket_dir: /var/run/postgresql
