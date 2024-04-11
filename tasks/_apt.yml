@@ -34,7 +34,7 @@
 - name: Apt | Define PgPool version to be installed
   set_fact:
     pgpool2_apt: pgpool2={{ pgpool_version_debian }}
-  when: pgpool_version_debian is defined
+  when: pgpool_version_debian is defined and pgpool_version_debian != ''
 
 - name: Apt | Install PgPool
   apt:
