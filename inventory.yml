@@ -122,6 +122,12 @@ pgpool:
         user: monitoring
         address: 0.0.0.0/0
         method: scram-sha-256
+      - type: hostssl
+        database: all
+        user: all
+        address: 0.0.0.0/0
+        method: scram-sha-256
+
     # logs
     pgpool_log_hostname: 'on'
     pgpool_log_statement: 'on'
