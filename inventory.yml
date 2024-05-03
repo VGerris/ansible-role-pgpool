@@ -137,13 +137,14 @@ pgpool:
     # connection_cache
     pgpool_connection_cache: 'on'
     # Pool
-    pgpool_num_init_children: 32
-    pgpool_max_pool: 4
+    pgpool_reserved_connections: 4
+    pgpool_num_init_children: 100
+    pgpool_max_pool: 2
     pgpool_serialize_accept: 'off'
-    pgpool_child_life_time: 0
-    pgpool_child_max_connections: 0
-    pgpool_connection_life_time: 0
-    pgpool_client_idle_limit: 300
+    pgpool_child_life_time: 300
+    pgpool_child_max_connections: 10000
+    pgpool_connection_life_time: 300
+    pgpool_client_idle_limit: 120
     # load-balancing
     pgpool_load_balance_mode: 'on'
     pgpool_disable_load_balance_on_write: 'transaction' # one of 'transaction', 'trans_transaction' or 'always'
