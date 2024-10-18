@@ -1,6 +1,6 @@
 ---
 # apt installation settings
-pgpool_apt_install: yes
+pgpool_apt_install: true
 pgpool_apt_key_id: "ACCC4CF8"
 pgpool_apt_key_url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
 pgpool_apt_repository: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main {{ pgpool_postgresql_version }}"
@@ -33,10 +33,10 @@ pgpool_postgres_password_cleartext: postgres
 
 # systemd
 pgpool_systemd_state: started
-pgpool_systemd_enabled: yes
+pgpool_systemd_enabled: true
 
 # logrotate
-pgpool_logrotate_cron_enabled: yes
+pgpool_logrotate_cron_enabled: true
 pgpool_logrotate_cron_schedule:
   minute: '*'
   hour: '1'
@@ -58,7 +58,7 @@ pgpool_pgpass_entries: []
 #     password: repmgr
 
 # .pcpass file
-pgpool_pcppass_entries: 
+pgpool_pcppass_entries:
   - hostname: localhost
     port: 9898
     user: pgpool
@@ -73,14 +73,14 @@ pgpool_pcppass_entries:
     password: pgpool
 
 # pool_passwd file
-pgpool_passwd_use_md5: no
+pgpool_passwd_use_md5: false
 pgpool_passwd_users_md5: 
   - username: pgpool
     password: pgpool
-pgpool_passwd_use_sha256: yes
+pgpool_passwd_use_sha256: true
 pgpool_passwd_users_sha256:
-  - username: pgpool #"{{ pgpool_passwd_users_sha256_username }}"
-    password: pgpool #"{{ pgpool_passwd_users_sha256_password }}"
+  - username: pgpool # "{{ pgpool_passwd_users_sha256_username }}"
+    password: pgpool # "{{ pgpool_passwd_users_sha256_password }}"
 
 # pgpool Connection Settings
 pgpool_listen_addresses: '*'
@@ -105,7 +105,7 @@ pgpool_backend_servers:
     application_name: server0
 
 # Authentication
-pgpool_enable_pool_hba: off
+pgpool_enable_pool_hba: false
 pgpool_pool_hba_entries: []
 # pgpool_pool_hba_entries:
 #   - type: host
@@ -118,7 +118,7 @@ pgpool_authentication_timeout: 60
 pgpool_allow_clear_text_frontend_auth: 'on'
 
 # SSL Connections
-pgpool_ssl: on
+pgpool_ssl: true
 pgpool_ssl_key: ./server.key
 pgpool_ssl_cert: ./server.cert
 pgpool_ssl_ca_cert: ''
@@ -196,7 +196,7 @@ pgpool_sr_check_database: ''
 pgpool_delay_threshold: 10000000
 # Special commands
 pgpool_follow_master_template: scripts/follow_master.repmgr.sh.j2
-pgpool_follow_master_command: 
+pgpool_follow_master_command:
 
 # HEALTH CHECK GLOBAL PARAMETERS
 pgpool_health_check_period: 5
@@ -250,7 +250,7 @@ pgpool_if_up_cmd: /usr/bin/sudo {{ pgpool_if_cmd_path }}/ip addr add $_IP_$/24 d
 pgpool_if_down_cmd: /usr/bin/sudo {{ pgpool_if_cmd_path }}/ip addr del $_IP_$/24 dev eth0
 pgpool_arping_path: '' # Varies with OS. Defined in vars/
 pgpool_arping_cmd: /usr/bin/sudo {{ pgpool_arping_path }}/arping -U $_IP_$ -w 1 -I eth0
-# Behavior on escalation Setting 
+# Behavior on escalation Setting
 pgpool_clear_memqcache_on_escalation: 'on'
 pgpool_wd_escalation_command: ''
 pgpool_wd_de_escalation_command: ''
@@ -269,7 +269,7 @@ pgpool_wd_heartbeat_port: 9694
 pgpool_wd_heartbeat_keepalive: 2
 pgpool_wd_heartbeat_deadtime: 30
 pgpool_heartbeat_destination: []
-# pgpool_heartbeat_destination: 
+# pgpool_heartbeat_destination:
 #   - hostname: host0_ip1
 #     port: 9694
 #     device: ''
@@ -281,7 +281,7 @@ pgpool_wd_lifecheck_user: nobody
 pgpool_wd_lifecheck_password: ''
 # Other pgpool Connection Settings
 pgpool_other_settings: []
-# pgpool_other_settings: 
+# pgpool_other_settings:
 #   - hostname: server0
 #     port: 9999
 #     wd_port: 9000

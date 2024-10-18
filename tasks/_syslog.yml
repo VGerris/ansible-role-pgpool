@@ -1,6 +1,6 @@
 ---
 - name: Syslog | Create log directory
-  file:
+  ansible.builtin.file:
     path: "{{ pgpool_logdir }}"
     state: directory
     owner: postgres
@@ -8,7 +8,7 @@
     mode: 0770
 
 - name: Syslog | Create initial pgpool logfile
-  file:
+  ansible.builtin.file:
     path: "{{ pgpool_logdir }}/pgpool.log"
     mode: 0644
     state: touch
@@ -17,13 +17,13 @@
   tags: ['molecule-idempotence-notest']
 
 - name: Syslog | Create logrotate configuration
-  template:
+  ansible.builtin.template:
     src: pgpool.logrotate.j2
     dest: /etc/logrotate.d/pgpool
     mode: 0644
 
 - name: Syslog | Update syslog facility
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/systemd/system/multi-user.target.wants/pgpool2.service
     regex: ^SyslogFacility=
     line: SyslogFacility={{ pgpool_syslog_facility | lower }}
@@ -31,7 +31,7 @@
   notify: Reload pgpool2
 
 - name: Syslog | Patch rsyslog obsolete configuration
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/rsyslog.conf
     regex: "{{ item }}"
     state: absent
@@ -48,14 +48,14 @@
   notify: Restart rsyslog
 
 - name: Syslog | Update rsyslog configuration
-  template:
+  ansible.builtin.template:
     src: rsyslog.pgpool.conf.j2
     dest: /etc/rsyslog.d/pgpool.conf
     mode: 0644
   notify: Restart rsyslog
 
 - name: Syslog | Create cron task for faster rotation checks
-  cron:
+  ansible.builtin.cron:
     name: Rotate pgpool.log
     minute: "{{ pgpool_logrotate_cron_schedule.minute }}"
     hour: "{{ pgpool_logrotate_cron_schedule.hour }}"

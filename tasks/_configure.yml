@@ -1,16 +1,16 @@
 ---
 - name: Configure | Generated hashed passwords for Ansible
-  set_fact: 
+  ansible.builtin.set_fact:
     pgpool_password_hashed: "{{ pgpool_password_cleartext | password_hash('sha512') }}"
     pgpool_postgres_password_hashed: "{{ pgpool_postgres_password_cleartext | password_hash('sha512') }}"
 
 - name: Configure | Create pgpool group
-  group:
+  ansible.builtin.group:
     name: "{{ pgpool_group }}"
     state: present
 
 - name: Configure | Ensure the user postgres is added the pgpool group
-  user:
+  ansible.builtin.user:
     name: postgres
     groups: "{{ pgpool_group }}"
     append: yes
@@ -18,7 +18,7 @@
     update_password: always
 
 - name: Configure | Create pgpool user
-  user:
+  ansible.builtin.user:
     name: "{{ pgpool_user }}"
     shell: /bin/bash
     home: "{{ pgpool_home_directory }}"
@@ -27,7 +27,7 @@
     group: "{{ pgpool_group }}"
 
 - name: Configure | Update pgpool user's file permissions
-  file:
+  ansible.builtin.file:
     path: "{{ pgpool_home_directory }}"
     owner: "{{ pgpool_user }}"
     group: "{{ pgpool_group }}"
@@ -35,13 +35,13 @@
     recurse: yes
 
 - name: Configure | Add sudo privileges for pgpool group
-  template:
+  ansible.builtin.template:
     src: sudoers.pgpool.j2
     dest: "/etc/sudoers.d/{{ pgpool_user }}"
     mode: 0644
 
 - name: Configure | Create socket
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     owner: "{{ pgpool_user }}"
@@ -53,7 +53,7 @@
     - "{{ pgpool_wd_ipc_socket_dir }}"
 
 - name: Configure | Upload pgpool.conf
-  template:
+  ansible.builtin.template:
     src: pgpool.conf.j2
     dest: "{{ pgpool_home_directory }}/pgpool.conf"
     owner: "{{ pgpool_user }}"
@@ -62,7 +62,7 @@
   notify: Reload pgpool2
 
 - name: Configure | Upload pool_hba.conf
-  template:
+  ansible.builtin.template:
     src: pool_hba.conf.j2
     dest: "{{ pgpool_home_directory }}/pool_hba.conf"
     owner: "{{ pgpool_user }}"
@@ -73,7 +73,7 @@
     - pgpool_pool_hba_entries | length > 0
 
 - name: Configure | Upload pcp.conf
-  template:
+  ansible.builtin.template:
     src: pcp.conf.j2
     dest: "{{ pgpool_home_directory }}/pcp.conf"
     owner: "{{ pgpool_user }}"
@@ -81,7 +81,7 @@
     mode: 0775
 
 - name: Configure | Upload .pcppass file (pgpool)
-  template:
+  ansible.builtin.template:
     src: pcppass.j2
     dest: "{{ pgpool_home_directory }}/.pcppass"
     owner: "{{ pgpool_user }}"
@@ -89,7 +89,7 @@
     mode: 0600
 
 - name: Configure | Upload .pcppass file (postgres)
-  template:
+  ansible.builtin.template:
     src: pcppass.j2
     dest: "{{ pgpool_postgresql_home_directory }}/.pcppass"
     owner: "{{ pgpool_postgresql_service_user }}"
@@ -97,7 +97,7 @@
     mode: 0600
 
 - name: Configure | Upload .pgpass file for postgres user
-  template:
+  ansible.builtin.template:
     src: pgpass.j2
     dest: "{{ pgpool_postgresql_home_directory }}/.pgpass"
     owner: "{{ pgpool_postgresql_service_user }}"
@@ -107,7 +107,7 @@
   when: pgpool_pgpass_entries | length > 0
 
 - name: Configure | Upload .pgpoolkey file for pgpool user ( for generation of pool_passwd)
-  template:
+  ansible.builtin.template:
     src: pgpoolkey.j2
     dest: "{{ pgpool_home_directory }}/.pgpoolkey"
     owner: "{{ pgpool_user }}"
@@ -117,7 +117,7 @@
   when: pgpool_passwd_use_sha256 | bool
 
 - name: Configure | Upload .pgpoolkey file for postgres user ( to have connections work)
-  template:
+  ansible.builtin.template:
     src: pgpoolkey.j2
     dest: "{{ pgpool_postgresql_home_directory }}/.pgpoolkey"
     owner: "{{ pgpool_postgresql_service_user }}"
@@ -127,7 +127,7 @@
   when: pgpool_passwd_use_sha256 | bool
 
 - name: Configure | Upload pgpool_node_id file for pgpool2 watchdog
-  template:
+  ansible.builtin.template:
     src: pgpool_node_id.j2
     dest: "{{ pgpool_home_directory }}/pgpool_node_id"
     owner: "{{ pgpool_postgresql_service_user }}"
@@ -135,7 +135,7 @@
     mode: 0600
 
 - name: Configure | Copy .bashrc
-  copy:
+  ansible.builtin.copy:
     src: /etc/skel/.bashrc
     dest: "{{ pgpool_home_directory }}/.bashrc"
     owner: "{{ pgpool_user }}"
@@ -144,7 +144,7 @@
     remote_src: yes
 
 - name: Configure | Upload .bash_aliases file
-  template:
+  ansible.builtin.template:
     src: bash_aliases.j2
     dest: "{{ pgpool_home_directory }}/.bash_aliases"
     owner: "{{ pgpool_user }}"
@@ -152,7 +152,7 @@
     mode: 0600
 
 - name: Configure | Generate pool_passwd file using md5 auth method
-  shell:
+  ansible.builtin.shell:
     cmd: |
       pg_md5 --md5auth --username={{ item.username }} {{ item.password }}
   loop: "{{ pgpool_passwd_users_md5 }}"
@@ -160,7 +160,7 @@
   become_user: "{{ pgpool_user }}"
 
 - name: Configure | Generate pool_passwd file using pg_enc auth method
-  shell:
+  ansible.builtin.shell:
     cmd: |
       pg_enc -m -f "{{ pgpool_home_directory }}/pgpool.conf" --username={{ item.username }} {{ item.password }}
   loop: "{{ pgpool_passwd_users_sha256 }}"

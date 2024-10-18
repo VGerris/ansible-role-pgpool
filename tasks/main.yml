@@ -6,26 +6,31 @@
     - "{{ role_path }}/vars/empty.yml"
   tags: ['always']
 
-- import_tasks: _apt.yml
+- name: Setup apt repos
+  import_tasks: _apt.yml
   tags: ['apt']
 
 - name: Populate service facts
   service_facts:
   tags: ['always']
-  
+
 - name: Get pgpool2 service status
   set_fact:
     pgpool2_running: "{{ ansible_facts.services['pgpool2'].state == 'running' }}"
   tags: ['always']
   
-- import_tasks: _configure.yml
+- name: Configure pgpool2
+  import_tasks: _configure.yml
   tags: ['configure', 'molecule-idempotence-notest']
 
-- import_tasks: _syslog.yml
+- name: Setup syslog
+  import_tasks: _syslog.yml
   tags: ['syslog']
 
-- import_tasks: _scripts.yml
+- name: Setup scripts
+  import_tasks: _scripts.yml
   tags: ['scripts']
 
-- import_tasks: _systemd.yml
+- name: Setup systemd
+  import_tasks: _systemd.yml
   tags: ['systemd']

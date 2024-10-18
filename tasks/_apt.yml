@@ -1,43 +1,43 @@
 ---
 # https://wiki.postgresql.org/wiki/Apt 
 - name: Apt | Make sure the CA certificates are available
-  apt:
+  ansible.builtin.apt:
     name: 
       - ca-certificates
       - gnupg
     state: present
 
 - name: Apt | Add PostgreSQL repository apt-key
-  apt_key:
+  ansible.builtin.apt_key:
     id: "{{ pgpool_apt_key_id }}"
     url: "{{ pgpool_apt_key_url }}"
     state: present
 
 - name: Apt | Add PostgreSQL repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "{{ pgpool_apt_repository }}"
     state: present
 
 - name: Apt | Add PostgreSQL archive repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "{{ item }}"
     state: present
     filename: apt-archive.postgresql.org
   loop: "{{ pgpool_apt_archive_repositories }}"
 
 - name: Apt | Add PostgreSQL repository preferences
-  template:
+  ansible.builtin.template:
     src: apt_postgresql_org_pub_repos_apt.j2
     dest: /etc/apt/preferences.d/apt_postgresql_org_pub_repos_apt.pref
     mode: 0644
 
 - name: Apt | Define PgPool version to be installed
-  set_fact:
+  ansible.builtin.set_fact:
     pgpool2_apt: pgpool2={{ pgpool_version_debian }}
   when: pgpool_version_debian is defined and pgpool_version_debian != ''
 
 - name: Apt | Install PgPool
-  apt:
+  ansible.builtin.apt:
     name: "{{ pgpool2_apt | default('pgpool2') }}"
     state: present
     update_cache: yes
@@ -46,12 +46,12 @@
   register: pgpool_install
 
 - name: Apt | Install dependencies
-  apt:
+  ansible.builtin.apt:
     name: "{{ pgpool_apt_dependencies }}"
     state: present
 
 - name: Apt | Install extensions
-  postgresql_query:
+  pcommunity.postgresql.postgresql_query:
     db: template1
     query: CREATE EXTENSION {{ item }}
   loop: "{{ pgpool_extensions }}"
@@ -60,7 +60,7 @@
   ignore_errors: true # todo : execute only on the primary node using postgresql_info or else
 
 - name: Apt | Shutdown systemd-based instance upon first installation
-  service:
+  ansible.builtin.service:
     name: pgpool2
     state: stopped
   when: pgpool_install.changed
