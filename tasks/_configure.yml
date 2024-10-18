@@ -13,7 +13,7 @@
   ansible.builtin.user:
     name: postgres
     groups: "{{ pgpool_group }}"
-    append: yes
+    append: true
     password: "{{ pgpool_postgres_password_hashed }}"
     update_password: always
 
@@ -31,14 +31,14 @@
     path: "{{ pgpool_home_directory }}"
     owner: "{{ pgpool_user }}"
     group: "{{ pgpool_group }}"
-    mode: 0775
-    recurse: yes
+    mode: "0775"
+    recurse: true
 
 - name: Configure | Add sudo privileges for pgpool group
   ansible.builtin.template:
     src: sudoers.pgpool.j2
     dest: "/etc/sudoers.d/{{ pgpool_user }}"
-    mode: 0644
+    mode: "0644"
 
 - name: Configure | Create socket
   ansible.builtin.file:
@@ -46,7 +46,7 @@
     state: directory
     owner: "{{ pgpool_user }}"
     group: "{{ pgpool_group }}"
-    mode: 0775
+    mode: "0775"
   loop:
     - "{{ pgpool_socket_dir }}"
     - "{{ pgpool_pcp_socket_dir }}"
@@ -58,7 +58,7 @@
     dest: "{{ pgpool_home_directory }}/pgpool.conf"
     owner: "{{ pgpool_user }}"
     group: "{{ pgpool_group }}"
-    mode: 0775
+    mode: "0775"
   notify: Reload pgpool2
 
 - name: Configure | Upload pool_hba.conf
@@ -67,9 +67,9 @@
     dest: "{{ pgpool_home_directory }}/pool_hba.conf"
     owner: "{{ pgpool_user }}"
     group: "{{ pgpool_group }}"
-    mode: 0775
-  when: 
-    - pgpool_enable_pool_hba | bool 
+    mode: "0775"
+  when:
+    - pgpool_enable_pool_hba | bool
     - pgpool_pool_hba_entries | length > 0
 
 - name: Configure | Upload pcp.conf
@@ -78,7 +78,7 @@
     dest: "{{ pgpool_home_directory }}/pcp.conf"
     owner: "{{ pgpool_user }}"
     group: "{{ pgpool_group }}"
-    mode: 0775
+    mode: "0775"
 
 - name: Configure | Upload .pcppass file (pgpool)
   ansible.builtin.template:
@@ -86,7 +86,7 @@
     dest: "{{ pgpool_home_directory }}/.pcppass"
     owner: "{{ pgpool_user }}"
     group: "{{ pgpool_group }}"
-    mode: 0600
+    mode: "0600"
 
 - name: Configure | Upload .pcppass file (postgres)
   ansible.builtin.template:
@@ -94,7 +94,7 @@
     dest: "{{ pgpool_postgresql_home_directory }}/.pcppass"
     owner: "{{ pgpool_postgresql_service_user }}"
     group: "{{ pgpool_postgresql_service_group }}"
-    mode: 0600
+    mode: "0600"
 
 - name: Configure | Upload .pgpass file for postgres user
   ansible.builtin.template:
@@ -102,8 +102,8 @@
     dest: "{{ pgpool_postgresql_home_directory }}/.pgpass"
     owner: "{{ pgpool_postgresql_service_user }}"
     group: "{{ pgpool_postgresql_service_group }}"
-    mode: 0600
-    trim_blocks: no
+    mode: "0600"
+    trim_blocks: false
   when: pgpool_pgpass_entries | length > 0
 
 - name: Configure | Upload .pgpoolkey file for pgpool user ( for generation of pool_passwd)
@@ -112,8 +112,8 @@
     dest: "{{ pgpool_home_directory }}/.pgpoolkey"
     owner: "{{ pgpool_user }}"
     group: "{{ pgpool_group }}"
-    mode: 0600
-    trim_blocks: no
+    mode: "0600"
+    trim_blocks: false
   when: pgpool_passwd_use_sha256 | bool
 
 - name: Configure | Upload .pgpoolkey file for postgres user ( to have connections work)
@@ -122,8 +122,8 @@
     dest: "{{ pgpool_postgresql_home_directory }}/.pgpoolkey"
     owner: "{{ pgpool_postgresql_service_user }}"
     group: "{{ pgpool_postgresql_service_group }}"
-    mode: 0600
-    trim_blocks: no
+    mode: "0600"
+    trim_blocks: false
   when: pgpool_passwd_use_sha256 | bool
 
 - name: Configure | Upload pgpool_node_id file for pgpool2 watchdog
@@ -132,7 +132,7 @@
     dest: "{{ pgpool_home_directory }}/pgpool_node_id"
     owner: "{{ pgpool_postgresql_service_user }}"
     group: "{{ pgpool_postgresql_service_group }}"
-    mode: 0600
+    mode: "0600"
 
 - name: Configure | Copy .bashrc
   ansible.builtin.copy:
@@ -140,8 +140,8 @@
     dest: "{{ pgpool_home_directory }}/.bashrc"
     owner: "{{ pgpool_user }}"
     group: "{{ pgpool_group }}"
-    mode: 0600
-    remote_src: yes
+    mode: "0600"
+    remote_src: true
 
 - name: Configure | Upload .bash_aliases file
   ansible.builtin.template:
@@ -149,7 +149,7 @@
     dest: "{{ pgpool_home_directory }}/.bash_aliases"
     owner: "{{ pgpool_user }}"
     group: "{{ pgpool_group }}"
-    mode: 0600
+    mode: "0600"
 
 - name: Configure | Generate pool_passwd file using md5 auth method
   ansible.builtin.shell:
@@ -177,12 +177,18 @@
   become_user: "root"
   ignore_errors: true
 
-- name: disable systemd timers that run autoupgrade - prevent restart network
-  ansible.builtin.shell:
-    cmd: |
-      systemctl mask apt-daily.service apt-daily-upgrade.service
-      systemctl daemon-reload
-    executable: /bin/bash
-  become: true
-  become_user: "root"
-  ignore_errors: true
+- name: Mask systemd timers that auto-upgrade - apt-daily
+  ansible.builtin.systemd:
+    name: apt-daily.service
+    masked: true
+    enabled: false
+
+- name: Mask systemd timers that auto-upgrade - apt-daily-upgrade
+  ansible.builtin.systemd:
+    name: apt-daily-upgrade.service
+    masked: true
+    enabled: false
+
+- name: Force systemd to reread configs
+  ansible.builtin.systemd:
+    daemon_reload: true

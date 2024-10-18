@@ -74,7 +74,7 @@ pgpool_pcppass_entries:
 
 # pool_passwd file
 pgpool_passwd_use_md5: false
-pgpool_passwd_users_md5: 
+pgpool_passwd_users_md5:
   - username: pgpool
     password: pgpool
 pgpool_passwd_use_sha256: true
@@ -95,7 +95,7 @@ pgpool_pcp_listen_addresses: '*'
 pgpool_pcp_port: 9898
 pgpool_pcp_socket_dir: /var/run/pcp
 
-# Backend Connection Settings 
+# Backend Connection Settings
 pgpool_backend_servers:
   - hostname: localhost
     port: 5432

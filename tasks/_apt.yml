@@ -51,7 +51,7 @@
     state: present
 
 - name: Apt | Install extensions
-  pcommunity.postgresql.postgresql_query:
+  community.postgresql.postgresql_query:
     db: template1
     query: CREATE EXTENSION {{ item }}
   loop: "{{ pgpool_extensions }}"

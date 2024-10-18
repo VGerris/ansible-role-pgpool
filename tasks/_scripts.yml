@@ -5,7 +5,7 @@
     dest: "{{ pgpool_home_directory }}/failover.sh"
     owner: "{{ pgpool_user }}"
     group: "{{ pgpool_group }}"
-    mode: 0775
+    mode: "0775"
   when: pgpool_failover_command is defined and pgpool_failover_command
 
 - name: Scripts | Copy follow_master script
@@ -14,7 +14,7 @@
     dest: "{{ pgpool_home_directory }}/follow_master.sh"
     owner: "{{ pgpool_user }}"
     group: "{{ pgpool_group }}"
-    mode: 0775
+    mode: "0775"
   when: pgpool_follow_master_command is defined and pgpool_follow_master_command
 
 - name: Scripts | Copy recovery script
@@ -23,7 +23,7 @@
     dest: "{{ pgpool_postgresql_data_directory }}/{{ pgpool_recovery_1st_stage_command }}"
     owner: "{{ pgpool_postgresql_service_user }}"
     group: "{{ pgpool_postgresql_service_group }}"
-    mode: 0775
+    mode: "0775"
   when: pgpool_recovery_1st_stage_command is defined and pgpool_recovery_1st_stage_command
 
 - name: Scripts | Copy pgpool_remote_start script
@@ -32,5 +32,5 @@
     dest: "{{ pgpool_postgresql_data_directory }}/log"
     owner: "{{ pgpool_postgresql_service_user }}"
     group: "{{ pgpool_postgresql_service_group }}"
-    mode: 0775
+    mode: "0775"
   when: pgpool_recovery_1st_stage_command is defined and pgpool_recovery_1st_stage_command

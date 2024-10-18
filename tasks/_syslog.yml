@@ -5,12 +5,12 @@
     state: directory
     owner: postgres
     group: postgres
-    mode: 0770
+    mode: "0770"
 
 - name: Syslog | Create initial pgpool logfile
   ansible.builtin.file:
     path: "{{ pgpool_logdir }}/pgpool.log"
-    mode: 0644
+    mode: "0644"
     state: touch
     owner: postgres
     group: postgres
@@ -20,14 +20,14 @@
   ansible.builtin.template:
     src: pgpool.logrotate.j2
     dest: /etc/logrotate.d/pgpool
-    mode: 0644
+    mode: "0644"
 
 - name: Syslog | Update syslog facility
   ansible.builtin.lineinfile:
     path: /etc/systemd/system/multi-user.target.wants/pgpool2.service
     regex: ^SyslogFacility=
     line: SyslogFacility={{ pgpool_syslog_facility | lower }}
-    mode: 0644
+    mode: "0644"
   notify: Reload pgpool2
 
 - name: Syslog | Patch rsyslog obsolete configuration
@@ -35,7 +35,7 @@
     path: /etc/rsyslog.conf
     regex: "{{ item }}"
     state: absent
-    mode: 0644
+    mode: "0644"
   loop:
     - FileOwner
     - FileGroup
@@ -51,7 +51,7 @@
   ansible.builtin.template:
     src: rsyslog.pgpool.conf.j2
     dest: /etc/rsyslog.d/pgpool.conf
-    mode: 0644
+    mode: "0644"
   notify: Restart rsyslog
 
 - name: Syslog | Create cron task for faster rotation checks
