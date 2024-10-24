@@ -44,7 +44,7 @@
       vars:
         # repmgr
         repmgr_version: 5.4.1
-        repmgr_master: pgsql01
+        # repmgr_master: pgsql01 # should be set in inventory or playbook
         repmgr_target_group: pgpool
         repmgr_promote_command: /usr/bin/repmgr standby promote -f /etc/repmgr.conf --log-to-file
         repmgr_follow_command: /usr/bin/repmgr standby follow -f /etc/repmgr.conf --log-to-file --upstream-node-id=%n
