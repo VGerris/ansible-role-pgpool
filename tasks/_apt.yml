@@ -1,8 +1,8 @@
 ---
-# https://wiki.postgresql.org/wiki/Apt 
+# https://wiki.postgresql.org/wiki/Apt
 - name: Apt | Make sure the CA certificates are available
   ansible.builtin.apt:
-    name: 
+    name:
       - ca-certificates
       - gnupg
     state: present
@@ -29,7 +29,7 @@
   ansible.builtin.template:
     src: apt_postgresql_org_pub_repos_apt.j2
     dest: /etc/apt/preferences.d/apt_postgresql_org_pub_repos_apt.pref
-    mode: 0644
+    mode: "0644"
 
 - name: Apt | Define PgPool version to be installed
   ansible.builtin.set_fact:
@@ -40,7 +40,7 @@
   ansible.builtin.apt:
     name: "{{ pgpool2_apt | default('pgpool2') }}"
     state: present
-    update_cache: yes
+    update_cache: true
     default_release: "{{ ansible_distribution_release + '-pgdg' }}"
     cache_valid_time: 3600
   register: pgpool_install

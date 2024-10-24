@@ -18,7 +18,7 @@
   set_fact:
     pgpool2_running: "{{ ansible_facts.services['pgpool2'].state == 'running' }}"
   tags: ['always']
-  
+
 - name: Configure pgpool2
   import_tasks: _configure.yml
   tags: ['configure', 'molecule-idempotence-notest']
