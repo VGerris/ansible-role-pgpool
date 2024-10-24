@@ -52,7 +52,7 @@
 
 - name: Apt | Install extensions
   community.postgresql.postgresql_query:
-    db: template1
+    db: "{{ pgpool_health_check_database }}"
     query: CREATE EXTENSION {{ item }}
   loop: "{{ pgpool_extensions }}"
   become: true
