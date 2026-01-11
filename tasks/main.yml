@@ -2,7 +2,7 @@
 - name: Load OS-specific variables
   include_vars: "{{ item }}"
   with_first_found:
-    - "{{ role_path }}/vars/{{ ansible_distribution_release }}.yml"
+    - "{{ role_path }}/vars/{{ ansible_facts['distribution_release'] }}.yml"
     - "{{ role_path }}/vars/empty.yml"
   tags: ['always']
 
