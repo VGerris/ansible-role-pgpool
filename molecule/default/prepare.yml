@@ -52,7 +52,7 @@
         repmgr_connection_check_type: query
         repmgr_log_level: INFO
         # postgresql.conf
-        postgresql_version: 15
+        postgresql_version: 16
         postgresql_listen_addresses: "*"
         postgresql_port: 5432
         postgresql_max_connections: 128

@@ -12,7 +12,7 @@ pgpool_apt_dependencies:
   - postgresql-client-{{ pgpool_postgresql_version }}
   - postgresql-client-common
   - arping
-  - postgresql-15-pgpool2
+  - postgresql-16-pgpool2
 pgpool_extensions:
   - pgpool_recovery
   - pgpool_adm
@@ -23,7 +23,7 @@ pgpool_extensions:
 # postgresql related variables
 # The major version of your pgpool backends
 # See follow_master and recovery_1st_stage bash scripts
-pgpool_postgresql_version: 15
+pgpool_postgresql_version: 16
 pgpool_postgresql_cluster_name: main
 pgpool_postgresql_service_user: postgres
 pgpool_postgresql_service_group: postgres
