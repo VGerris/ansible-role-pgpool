@@ -169,7 +169,7 @@ pgpool:
     pgpool_auto_failback: 'on'
     pgpool_trusted_servers: 'pgsql01,pgsql02,pgsql03'
     # Watchdog
-    pgpool_delegate_IP: 192.168.56.30
+    pgpool_delegate_ip: 192.168.56.30
     pgpool_use_watchdog: 'on'
     pgpool_if_up_cmd: /usr/bin/sudo {{ pgpool_if_cmd_path }}/ip addr add $_IP_$/24 broadcast 192.168.56.255 dev ens3
     pgpool_if_down_cmd: /usr/bin/sudo {{ pgpool_if_cmd_path }}/ip addr del $_IP_$/24 broadcast 192.168.56.255 dev ens3

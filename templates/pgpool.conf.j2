@@ -250,7 +250,7 @@ pid_file_name = '{{ pgpool_pid_file_name }}'
                                    # location of pgpool.conf file or
                                    # as an absolute path
                                    # (change requires restart)
-logdir = '{{ pgpool_logdir }}'
+workdir = '{{ pgpool_logdir }}'
                                    # Directory of pgPool status file
                                    # (change requires restart)
 
@@ -593,7 +593,7 @@ wd_ipc_socket_dir = '{{ pgpool_wd_ipc_socket_dir }}'
 
 # - Virtual IP control Setting -
 
-delegate_IP = '{{ pgpool_delegate_IP }}'
+delegate_ip = '{{ pgpool_delegate_ip }}'
                                     # delegate IP address
                                     # If this is empty, virtual IP never bring up.
                                     # (change requires restart)

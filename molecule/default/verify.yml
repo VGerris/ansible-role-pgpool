@@ -5,7 +5,7 @@
   gather_facts: yes
 
   vars:
-    pgpool_delegate_IP: 192.168.30.30
+    pgpool_delegate_ip: 192.168.30.30
     pgpool_port: 9999
     pgpool_pcp_port: 9898
     pgpool_passwd_users_md5: 
@@ -41,7 +41,7 @@
 
     - name: Show POOL_NODES # TODO - verify md5 / sha256
       community.postgresql.postgresql_query:
-        login_host: "{{ pgpool_delegate_IP }}"
+        login_host: "{{ pgpool_delegate_ip }}"
         login_user: "{{ pgpool_passwd_users_md5[0].username }}"
         db: testdb
         port: "{{ pgpool_port }}"

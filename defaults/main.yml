@@ -3,10 +3,10 @@
 pgpool_apt_install: true
 pgpool_apt_key_id: "ACCC4CF8"
 pgpool_apt_key_url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
-pgpool_apt_repository: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main {{ pgpool_postgresql_version }}"
+pgpool_apt_repository: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_facts['distribution_release'] }}-pgdg main {{ pgpool_postgresql_version }}"
 pgpool_apt_archive_repositories:
-  - "deb https://apt-archive.postgresql.org/pub/repos/apt {{ ansible_distribution_release }}-pgdg-archive main"
-  - "deb-src https://apt-archive.postgresql.org/pub/repos/apt {{ ansible_distribution_release }}-pgdg-archive main"
+  - "deb https://apt-archive.postgresql.org/pub/repos/apt {{ ansible_facts['distribution_release'] }}-pgdg-archive main"
+  - "deb-src https://apt-archive.postgresql.org/pub/repos/apt {{ ansible_facts['distribution_release'] }}-pgdg-archive main"
 pgpool_apt_pin_priority: 500
 pgpool_apt_dependencies:
   - postgresql-client-{{ pgpool_postgresql_version }}
@@ -244,7 +244,7 @@ pgpool_wd_priority: 1
 pgpool_authkey: ''
 pgpool_wd_ipc_socket_dir: /var/run/watchdog
 # Virtual IP control Setting
-pgpool_delegate_IP: ''
+pgpool_delegate_ip: ''
 pgpool_if_cmd_path: '' # Varies with OS. Defined in vars/
 pgpool_if_up_cmd: /usr/bin/sudo {{ pgpool_if_cmd_path }}/ip addr add $_IP_$/24 dev eth0 label eth0:0
 pgpool_if_down_cmd: /usr/bin/sudo {{ pgpool_if_cmd_path }}/ip addr del $_IP_$/24 dev eth0
