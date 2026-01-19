@@ -41,7 +41,7 @@
     name: "{{ pgpool2_apt | default('pgpool2') }}"
     state: present
     update_cache: true
-    default_release: "{{ ansible_distribution_release + '-pgdg' }}"
+    default_release: "{{ ansible_facts['distribution_release'] + '-pgdg' }}"
     cache_valid_time: 3600
   register: pgpool_install
 
