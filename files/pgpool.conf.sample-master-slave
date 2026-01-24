@@ -240,7 +240,7 @@ pid_file_name = '/var/run/pgpool/pgpool.pid'
                                    # location of pgpool.conf file or
                                    # as an absolute path
                                    # (change requires restart)
-logdir = '/tmp'
+work_dir = '/tmp'
                                    # Directory of pgPool status file
                                    # (change requires restart)
 

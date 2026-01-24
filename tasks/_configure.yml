@@ -131,8 +131,8 @@
     src: pgpool_node_id.j2
     dest: "{{ pgpool_home_directory }}/pgpool_node_id"
     owner: "{{ pgpool_user }}"
-    group: "{{ pgpool_group }}"
-    mode: "0600"
+    group: "{{ pgpool_postgresql_service_group }}"
+    mode: "0640"
 
 - name: Configure | Copy .bashrc
   ansible.builtin.copy:

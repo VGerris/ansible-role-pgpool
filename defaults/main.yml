@@ -156,7 +156,7 @@ pgpool_log_error_verbosity: default
 pgpool_client_min_messages: notice
 pgpool_log_min_messages: warning
 
-# FILE LOCATIONS
+# FILE LOCATIONS # logdir is work_dir since PGpool 4.7
 pgpool_logdir: /var/log/pgpool
 pgpool_pid_file_name: /var/run/pgpool/pgpool.pid
 
